@@ -11,15 +11,17 @@ public final class ReadJsonFiles {
 	public static List<String> getResourceFiles(String path) throws IOException {
 		List<String> filenames = new ArrayList<>();
 
-		try (InputStream in = ReadJsonFiles.class.getResourceAsStream(path);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+		InputStream in = ReadJsonFiles.class.getResourceAsStream(path);
+		if (in == null) {
+			in = ReadJsonFiles.class.getClassLoader().getResourceAsStream(path);
+		}
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String resource;
 
 			while ((resource = br.readLine()) != null) {
 				filenames.add(path + "/" + resource);
 			}
 		}
-
 		return filenames;
 	}
 
